@@ -52,7 +52,9 @@ export class EventRelationalRepository implements EventRepository {
       take: limit,
     });
 
-    return eventEntities.map((eventEntity) => EventMapper.toDomain(eventEntity));
+    return eventEntities.map((eventEntity) =>
+      EventMapper.toDomain(eventEntity),
+    );
   }
 
   async findById(id: Event['id']): Promise<NullableType<Event>> {
@@ -62,15 +64,20 @@ export class EventRelationalRepository implements EventRepository {
     return entity ? EventMapper.toDomain(entity) : null;
   }
 
-  async update(id: Event['id'], payload: Partial<Event>): Promise<Event | null> {
+  async update(
+    id: Event['id'],
+    payload: Partial<Event>,
+  ): Promise<Event | null> {
     const entity = await this.eventsRepository.findOne({ where: { id } });
     if (!entity) return null;
 
     const updatedEntity = await this.eventsRepository.save(
-      this.eventsRepository.create(EventMapper.toPersistence({
-        ...EventMapper.toDomain(entity),
-        ...payload,
-      })),
+      this.eventsRepository.create(
+        EventMapper.toPersistence({
+          ...EventMapper.toDomain(entity),
+          ...payload,
+        }),
+      ),
     );
     return EventMapper.toDomain(updatedEntity);
   }
@@ -79,7 +86,9 @@ export class EventRelationalRepository implements EventRepository {
     await this.eventsRepository.softDelete(id);
   }
 
-   async countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]> {
+  async countByMetricForDate(
+    date: string,
+  ): Promise<{ metricName: string; count: number }[]> {
     if (!date) return [];
 
     const start = new Date(date + 'T00:00:00.000Z');
@@ -94,7 +103,7 @@ export class EventRelationalRepository implements EventRepository {
 
     // Aggregate counts by eventName
     const countsMap = new Map<string, number>();
-    events.forEach(event => {
+    events.forEach((event) => {
       const key = event.eventName;
       countsMap.set(key, (countsMap.get(key) ?? 0) + 1);
     });
@@ -111,31 +120,33 @@ export class EventRelationalRepository implements EventRepository {
     });
   }
 
-    /**
+  /**
    * Find profile attributes by email
    */
-  async findProfileAttributesByEmail(email: string): Promise<Record<string, any> | null> {
+  async findProfileAttributesByEmail(
+    email: string,
+  ): Promise<Record<string, any> | null> {
     // TODO: Fix query to return valid data
     if (!email) return null;
     const result = await this.eventsRepository.query(
-        `SELECT profileAttributes 
+      `SELECT profileAttributes 
         FROM events 
         WHERE JSON_UNQUOTE(JSON_EXTRACT(profileAttributes, '$.email')) = ? 
         LIMIT 1`,
-        [email],
-      );
+      [email],
+    );
 
-      if (!result || result.length === 0) {
-        return null;
-      }
+    if (!result || result.length === 0) {
+      return null;
+    }
 
-      // If profileAttributes is JSON column, TypeORM returns it as object
-      // If stored as string, parse it
-      const profileAttributes = typeof result[0].profileAttributes === 'string'
+    // If profileAttributes is JSON column, TypeORM returns it as object
+    // If stored as string, parse it
+    const profileAttributes =
+      typeof result[0].profileAttributes === 'string'
         ? JSON.parse(result[0].profileAttributes)
         : result[0].profileAttributes;
 
-      return profileAttributes;
+    return profileAttributes;
   }
-
 }

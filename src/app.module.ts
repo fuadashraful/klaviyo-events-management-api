@@ -14,10 +14,7 @@ import { EventModule } from './events/events.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        databaseConfig,
-        appConfig,
-      ],
+      load: [databaseConfig, appConfig],
       envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
@@ -27,7 +24,7 @@ import { EventModule } from './events/events.module';
       },
     }),
     ScheduleModule.forRoot(),
-    EventModule
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],

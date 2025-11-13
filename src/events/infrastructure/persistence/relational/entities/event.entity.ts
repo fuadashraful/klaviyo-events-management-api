@@ -31,5 +31,4 @@ export class EventEntity extends EntityRelationalHelper {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
 }

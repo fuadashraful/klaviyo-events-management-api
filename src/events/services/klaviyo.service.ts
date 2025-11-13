@@ -5,7 +5,8 @@ import axios from 'axios';
 @Injectable()
 export class KlaviyoService {
   private readonly klaviyoUrl = 'https://a.klaviyo.com/api/events';
-  private readonly klaviyoApiKey = process.env.KLAVIYO_API_KEY ?? 'your-private-api-key';
+  private readonly klaviyoApiKey =
+    process.env.KLAVIYO_API_KEY ?? 'your-private-api-key';
 
   async createEvent(dto: CreateEventDto): Promise<any> {
     const payload = this.buildKlaviyoPayload(dto);
@@ -24,7 +25,10 @@ export class KlaviyoService {
 
       return response.data;
     } catch (error) {
-      console.error('Error creating Klaviyo event:', error.response?.data || error.message);
+      console.error(
+        'Error creating Klaviyo event:',
+        error.response?.data || error.message,
+      );
       throw new HttpException(
         error.response?.data || 'Failed to create event',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
@@ -58,8 +62,7 @@ export class KlaviyoService {
           value: dto.eventAttributes?.value ?? 9.99,
           value_currency: dto.eventAttributes?.value_currency ?? 'USD',
           unique_id:
-            dto.eventAttributes?.unique_id ??
-            `${dto.eventName}-${Date.now()}`,
+            dto.eventAttributes?.unique_id ?? `${dto.eventName}-${Date.now()}`,
         },
       },
     };

@@ -14,7 +14,8 @@ import { KlaviyoService } from './services/klaviyo.service';
 
 @Injectable()
 export class EventsService {
-  constructor(private readonly eventRepository: EventRepository,
+  constructor(
+    private readonly eventRepository: EventRepository,
     private readonly klaviyoService: KlaviyoService,
   ) {}
 
@@ -118,9 +119,9 @@ export class EventsService {
     });
 
     if (!updatedData) {
-        throw new NotFoundException(`Event with ID "${id}" not found`);
+      throw new NotFoundException(`Event with ID "${id}" not found`);
     }
-    
+
     return updatedData;
   }
 
@@ -132,11 +133,13 @@ export class EventsService {
     await this.eventRepository.remove(id);
   }
 
-    /**
+  /**
    * Count events grouped by metric (eventName) for a specific date
    * @param date YYYY-MM-DD format
    */
-  async countEventsByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]> {
+  async countEventsByMetricForDate(
+    date: string,
+  ): Promise<{ metricName: string; count: number }[]> {
     return this.eventRepository.countByMetricForDate(date);
   }
 
@@ -147,12 +150,15 @@ export class EventsService {
     await this.eventRepository.deleteOlderThan(sevenDaysAgo);
   }
 
-   async getProfileAttributesByEmail(email: string): Promise<Record<string, any>> {
+  async getProfileAttributesByEmail(
+    email: string,
+  ): Promise<Record<string, any>> {
     if (!email) {
       throw new NotFoundException('Email must be provided');
     }
 
-    const entity = await this.eventRepository.findProfileAttributesByEmail(email);
+    const entity =
+      await this.eventRepository.findProfileAttributesByEmail(email);
 
     if (!entity) {
       throw new NotFoundException(`No profile found with email: ${email}`);

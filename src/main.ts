@@ -13,7 +13,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
 
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
@@ -28,7 +27,7 @@ async function bootstrap() {
 
   const dataSource = app.get(DataSource);
   await dataSource.runMigrations();
-  
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

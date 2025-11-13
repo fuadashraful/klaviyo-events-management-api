@@ -14,7 +14,7 @@ import {
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiQuery,
-  ApiResponse
+  ApiResponse,
 } from '@nestjs/swagger';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -55,7 +55,10 @@ export class EventsController {
    * Create a single event
    */
   @Post()
-  @ApiCreatedResponse({ type: Event, description: 'Event created successfully' })
+  @ApiCreatedResponse({
+    type: Event,
+    description: 'Event created successfully',
+  })
   @ApiBadRequestResponse({ description: 'Invalid event payload' })
   async create(@Body() createEventDto: CreateEventDto): Promise<Event> {
     if (!createEventDto.eventName) {
@@ -90,8 +93,15 @@ export class EventsController {
   }
 
   @Get('count-by-metric')
-  @ApiQuery({ name: 'date', required: true, description: 'Date in YYYY-MM-DD format' })
-  @ApiResponse({ status: 200, description: 'Event counts by metric for the given date' })
+  @ApiQuery({
+    name: 'date',
+    required: true,
+    description: 'Date in YYYY-MM-DD format',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Event counts by metric for the given date',
+  })
   async getCountByMetric(
     @Query('date') date: string,
   ): Promise<{ metricName: string; count: number }[]> {

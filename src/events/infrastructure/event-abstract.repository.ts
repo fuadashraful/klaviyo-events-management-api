@@ -10,13 +10,20 @@ export abstract class EventRepository {
 
   abstract findById(id: Event['id']): Promise<NullableType<Event>>;
 
-  abstract update(id: Event['id'], payload: Partial<Event>): Promise<Event | null>;
+  abstract update(
+    id: Event['id'],
+    payload: Partial<Event>,
+  ): Promise<Event | null>;
 
   abstract remove(id: Event['id']): Promise<void>;
 
-  abstract countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]>;
+  abstract countByMetricForDate(
+    date: string,
+  ): Promise<{ metricName: string; count: number }[]>;
 
   abstract deleteOlderThan(date: Date): Promise<void>;
 
-  abstract findProfileAttributesByEmail(email: string): Promise<Record<string, any> | null>;
+  abstract findProfileAttributesByEmail(
+    email: string,
+  ): Promise<Record<string, any> | null>;
 }
