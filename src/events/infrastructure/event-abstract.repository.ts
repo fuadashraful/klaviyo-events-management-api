@@ -13,4 +13,6 @@ export abstract class EventRepository {
   abstract update(id: Event['id'], payload: Partial<Event>): Promise<Event | null>;
 
   abstract remove(id: Event['id']): Promise<void>;
+
+  abstract countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]>;
 }

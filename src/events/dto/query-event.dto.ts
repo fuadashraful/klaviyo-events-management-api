@@ -4,7 +4,6 @@ import { IsOptional, IsString, IsNumber, Min, Max } from 'class-validator';
 
 export class QueryEventDto {
   @ApiPropertyOptional({
-    example: 'User Signup',
     description: 'Search events by name (partial, case-insensitive)',
   })
   @IsOptional()
@@ -12,7 +11,6 @@ export class QueryEventDto {
   eventName?: string;
 
   @ApiPropertyOptional({
-    example: 'c2f5e9e3-6b7b-4dcb-8f8f-123456789abc',
     description: 'Filter events by profile ID',
   })
   @IsOptional()

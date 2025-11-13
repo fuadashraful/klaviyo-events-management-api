@@ -131,4 +131,12 @@ export class EventsService {
     const event = await this.findById(id);
     await this.eventRepository.remove(id);
   }
+
+    /**
+   * Count events grouped by metric (eventName) for a specific date
+   * @param date YYYY-MM-DD format
+   */
+  async countEventsByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]> {
+    return this.eventRepository.countByMetricForDate(date);
+  }
 }

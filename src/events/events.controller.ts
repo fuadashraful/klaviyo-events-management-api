@@ -12,7 +12,9 @@ import {
   ApiTags,
   ApiCreatedResponse,
   ApiBadRequestResponse,
-  ApiOkResponse
+  ApiOkResponse,
+  ApiQuery,
+  ApiResponse
 } from '@nestjs/swagger';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -85,5 +87,14 @@ export class EventsController {
       createBulkEventDto.events,
     );
     return createdEvents;
+  }
+
+  @Get('count-by-metric')
+  @ApiQuery({ name: 'date', required: true, description: 'Date in YYYY-MM-DD format' })
+  @ApiResponse({ status: 200, description: 'Event counts by metric for the given date' })
+  async getCountByMetric(
+    @Query('date') date: string,
+  ): Promise<{ metricName: string; count: number }[]> {
+    return this.eventsService.countEventsByMetricForDate(date);
   }
 }

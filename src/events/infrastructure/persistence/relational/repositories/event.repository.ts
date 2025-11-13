@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Between } from 'typeorm';
 import { NullableType } from 'src/utils/types/nullable.type';
 import { EventEntity } from '../entities/event.entity';
 import { Event } from '../../../../domain/event';
@@ -77,5 +77,31 @@ export class EventRelationalRepository implements EventRepository {
 
   async remove(id: Event['id']): Promise<void> {
     await this.eventsRepository.softDelete(id);
+  }
+
+   async countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]> {
+    if (!date) return [];
+
+    const start = new Date(date + 'T00:00:00.000Z');
+    const end = new Date(date + 'T23:59:59.999Z');
+
+    // Fetch events within date range
+    const events = await this.eventsRepository.find({
+      where: {
+        createdAt: Between(start, end),
+      },
+    });
+
+    // Aggregate counts by eventName
+    const countsMap = new Map<string, number>();
+    events.forEach(event => {
+      const key = event.eventName;
+      countsMap.set(key, (countsMap.get(key) ?? 0) + 1);
+    });
+
+    return Array.from(countsMap.entries()).map(([metricName, count]) => ({
+      metricName,
+      count,
+    }));
   }
 }
