@@ -1,0 +1,62 @@
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
+import { EventsService } from './events.service';
+import { CreateEventDto } from './dto/create-event.dto';
+import { CreateBulkEventDto } from './dto/bulk-create-event.dto';
+import { Event } from './domain/event';
+
+@ApiTags('Events')
+@Controller('v1/events')
+export class EventsController {
+  constructor(private readonly eventsService: EventsService) {}
+
+  /**
+   * POST /events
+   * Create a single event
+   */
+  @Post()
+  @ApiCreatedResponse({ type: Event, description: 'Event created successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid event payload' })
+  async create(@Body() createEventDto: CreateEventDto): Promise<Event> {
+    if (!createEventDto.eventName) {
+      throw new BadRequestException('Event name is required');
+    }
+
+    const createdEvent = await this.eventsService.createEvent(createEventDto);
+    return createdEvent;
+  }
+
+  /**
+   * POST /events/bulk
+   * Create multiple events in bulk
+   */
+  @Post('bulk')
+  @ApiCreatedResponse({
+    type: [Event],
+    description: 'Bulk events created successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid bulk events payload' })
+  async createBulk(
+    @Body() createBulkEventDto: CreateBulkEventDto,
+  ): Promise<Event[]> {
+    if (!createBulkEventDto.events || createBulkEventDto.events.length === 0) {
+      throw new BadRequestException('Events array cannot be empty');
+    }
+
+    const createdEvents = await this.eventsService.createBulkEvents(
+      createBulkEventDto.events,
+    );
+    return createdEvents;
+  }
+}
