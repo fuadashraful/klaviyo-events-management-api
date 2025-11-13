@@ -110,4 +110,32 @@ export class EventRelationalRepository implements EventRepository {
       createdAt: LessThan(date),
     });
   }
+
+    /**
+   * Find profile attributes by email
+   */
+  async findProfileAttributesByEmail(email: string): Promise<Record<string, any> | null> {
+    // TODO: Fix query to return valid data
+    if (!email) return null;
+    const result = await this.eventsRepository.query(
+        `SELECT profileAttributes 
+        FROM events 
+        WHERE JSON_UNQUOTE(JSON_EXTRACT(profileAttributes, '$.email')) = ? 
+        LIMIT 1`,
+        [email],
+      );
+
+      if (!result || result.length === 0) {
+        return null;
+      }
+
+      // If profileAttributes is JSON column, TypeORM returns it as object
+      // If stored as string, parse it
+      const profileAttributes = typeof result[0].profileAttributes === 'string'
+        ? JSON.parse(result[0].profileAttributes)
+        : result[0].profileAttributes;
+
+      return profileAttributes;
+  }
+
 }

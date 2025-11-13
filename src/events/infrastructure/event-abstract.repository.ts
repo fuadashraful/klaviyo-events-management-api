@@ -17,4 +17,6 @@ export abstract class EventRepository {
   abstract countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]>;
 
   abstract deleteOlderThan(date: Date): Promise<void>;
+
+  abstract findProfileAttributesByEmail(email: string): Promise<Record<string, any> | null>;
 }

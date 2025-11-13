@@ -5,7 +5,7 @@ import axios from 'axios';
 @Injectable()
 export class KlaviyoService {
   private readonly klaviyoUrl = 'https://a.klaviyo.com/api/events';
-  private readonly klaviyoApiKey = process.env.KLAVIYO_API_KEY ?? 'your-private-api-key'; // Ideally: process.env.KLAVIYO_API_KEY
+  private readonly klaviyoApiKey = process.env.KLAVIYO_API_KEY ?? 'your-private-api-key';
 
   async createEvent(dto: CreateEventDto): Promise<any> {
     const payload = this.buildKlaviyoPayload(dto);

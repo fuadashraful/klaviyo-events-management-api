@@ -146,4 +146,18 @@ export class EventsService {
 
     await this.eventRepository.deleteOlderThan(sevenDaysAgo);
   }
+
+   async getProfileAttributesByEmail(email: string): Promise<Record<string, any>> {
+    if (!email) {
+      throw new NotFoundException('Email must be provided');
+    }
+
+    const entity = await this.eventRepository.findProfileAttributesByEmail(email);
+
+    if (!entity) {
+      throw new NotFoundException(`No profile found with email: ${email}`);
+    }
+
+    return entity.profileAttributes;
+  }
 }

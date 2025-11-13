@@ -97,4 +97,10 @@ export class EventsController {
   ): Promise<{ metricName: string; count: number }[]> {
     return this.eventsService.countEventsByMetricForDate(date);
   }
+
+  @Get('profile-attributes')
+  @ApiQuery({ name: 'email', required: true, example: 'user@example.com' })
+  async getProfileAttributes(@Query('email') email: string) {
+    return this.eventsService.getProfileAttributesByEmail(email);
+  }
 }
