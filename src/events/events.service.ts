@@ -10,10 +10,13 @@ import { CreateBulkEventDto } from './dto/bulk-create-event.dto';
 import { QueryEventDto } from './dto/query-event.dto';
 import { EventRepository } from './infrastructure/event-abstract.repository';
 import { Event } from './domain/event';
+import { KlaviyoService } from './services/klaviyo.service';
 
 @Injectable()
 export class EventsService {
-  constructor(private readonly eventRepository: EventRepository) {}
+  constructor(private readonly eventRepository: EventRepository,
+    private readonly klaviyoService: KlaviyoService,
+  ) {}
 
   /**
    * Create a single event
@@ -29,12 +32,15 @@ export class EventsService {
     const existingEvent = await this.eventRepository.findByName(
       createEventDto.eventName,
     );
+
     if (existingEvent) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: { eventName: 'Event with this name already exists' },
       });
     }
+
+    this.klaviyoService.createEvent(createEventDto);
 
     return this.eventRepository.create({
       eventName: createEventDto.eventName,
