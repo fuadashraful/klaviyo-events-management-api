@@ -139,4 +139,11 @@ export class EventsService {
   async countEventsByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]> {
     return this.eventRepository.countByMetricForDate(date);
   }
+
+  async deleteEventsOlderThan7Days(): Promise<void> {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    await this.eventRepository.deleteOlderThan(sevenDaysAgo);
+  }
 }

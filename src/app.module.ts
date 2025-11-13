@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { AppController } from './app.controller';
@@ -25,6 +26,7 @@ import { EventModule } from './events/events.module';
         return new DataSource(options).initialize();
       },
     }),
+    ScheduleModule.forRoot(),
     EventModule
   ],
   controllers: [AppController],

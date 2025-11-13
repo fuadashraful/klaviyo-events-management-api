@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, Between } from 'typeorm';
+import { Repository, In, Between, LessThan } from 'typeorm';
 import { NullableType } from 'src/utils/types/nullable.type';
 import { EventEntity } from '../entities/event.entity';
 import { Event } from '../../../../domain/event';
@@ -103,5 +103,11 @@ export class EventRelationalRepository implements EventRepository {
       metricName,
       count,
     }));
+  }
+
+  async deleteOlderThan(date: Date): Promise<void> {
+    await this.eventsRepository.delete({
+      createdAt: LessThan(date),
+    });
   }
 }

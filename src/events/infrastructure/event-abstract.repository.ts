@@ -15,4 +15,6 @@ export abstract class EventRepository {
   abstract remove(id: Event['id']): Promise<void>;
 
   abstract countByMetricForDate(date: string): Promise<{ metricName: string; count: number }[]>;
+
+  abstract deleteOlderThan(date: Date): Promise<void>;
 }
