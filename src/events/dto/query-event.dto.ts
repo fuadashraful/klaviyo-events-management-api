@@ -9,7 +9,7 @@ export class QueryEventDto {
   })
   @IsOptional()
   @IsString()
-  name?: string;
+  eventName?: string;
 
   @ApiPropertyOptional({
     example: 'c2f5e9e3-6b7b-4dcb-8f8f-123456789abc',

@@ -13,7 +13,7 @@ export class Event {
     example: 'Purchased Item',
     description: 'Name of the event',
   })
-  name: string;
+  eventName: string;
 
   @ApiProperty({
     type: Object,

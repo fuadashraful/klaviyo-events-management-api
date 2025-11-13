@@ -23,23 +23,23 @@ export class EventRelationalRepository implements EventRepository {
     return EventMapper.toDomain(newEntity);
   }
 
-  async findByName(name: string): Promise<NullableType<Event>> {
-    if (!name) return null;
+  async findByName(eventName: string): Promise<NullableType<Event>> {
+    if (!eventName) return null;
 
     const entity = await this.eventsRepository.findOne({
-      where: { name },
+      where: { eventName },
     });
     return entity ? EventMapper.toDomain(entity) : null;
   }
 
   async findManyWithPagination(queryDto: QueryEventDto): Promise<Event[]> {
-    const { name, profileId, page = 1, limit = 10 } = queryDto;
+    const { eventName, profileId, page = 1, limit = 10 } = queryDto;
     const skip = (page - 1) * limit;
 
     // Build TypeORM "where" conditions
     const where: any = {};
-    if (name) {
-      where.name = name; // exact match; for partial match, use Like
+    if (eventName) {
+      where.eventName = eventName; // exact match; for partial match, use Like
     }
     if (profileId) {
       where.profileId = profileId;

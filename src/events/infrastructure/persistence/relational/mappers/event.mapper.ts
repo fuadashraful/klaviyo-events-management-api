@@ -10,7 +10,7 @@ export class EventMapper {
       persistenceEntity.id = domainEntity.id;
     }
 
-    persistenceEntity.name = domainEntity.name ?? '';
+    persistenceEntity.eventName = domainEntity.eventName ?? '';
     persistenceEntity.eventAttributes = domainEntity.eventAttributes ?? {};
     persistenceEntity.profileAttributes = domainEntity.profileAttributes ?? {};
     persistenceEntity.createdAt = domainEntity.createdAt ?? new Date();
@@ -22,7 +22,7 @@ export class EventMapper {
   static toDomain(raw: EventEntity): Event {
     const domainEntity = new Event();
     domainEntity.id = raw.id;
-    domainEntity.name = raw.name;
+    domainEntity.eventName = raw.eventName;
     domainEntity.eventAttributes = raw.eventAttributes;
     domainEntity.profileAttributes = raw.profileAttributes;
     domainEntity.createdAt = raw.createdAt;

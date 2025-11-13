@@ -37,7 +37,7 @@ export class EventsService {
     }
 
     return this.eventRepository.create({
-      name: createEventDto.eventName,
+      eventName: createEventDto.eventName,
       eventAttributes: createEventDto.eventAttributes,
       profileAttributes: createEventDto.profileAttributes,
       createdAt: new Date(),
@@ -65,7 +65,7 @@ export class EventsService {
       }
 
       const created = await this.eventRepository.create({
-        name: evt.eventName,
+        eventName: evt.eventName,
         eventAttributes: evt.eventAttributes,
         profileAttributes: evt.profileAttributes,
         createdAt: new Date(),
@@ -105,7 +105,7 @@ export class EventsService {
     const event = await this.findById(id);
 
     const updatedData = await this.eventRepository.update(id, {
-      name: updateEventDto.eventName ?? event.name,
+      eventName: updateEventDto.eventName ?? event.eventName,
       eventAttributes: updateEventDto.eventAttributes ?? event.eventAttributes,
       profileAttributes:
         updateEventDto.profileAttributes ?? event.profileAttributes,

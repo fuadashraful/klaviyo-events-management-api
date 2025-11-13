@@ -14,7 +14,7 @@ export class CreateEventsTable1689123456789 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'name',
+            name: 'eventName',
             type: 'varchar',
             length: '255',
             isNullable: false,

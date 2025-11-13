@@ -18,7 +18,7 @@ export class EventEntity extends EntityRelationalHelper {
 
   @Index()
   @Column({ type: String })
-  name: string;
+  eventName: string;
 
   @Column({ type: 'json', nullable: true })
   eventAttributes: Record<string, any>;
