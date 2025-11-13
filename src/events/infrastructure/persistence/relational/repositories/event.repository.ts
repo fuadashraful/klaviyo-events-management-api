@@ -6,6 +6,7 @@ import { EventEntity } from '../entities/event.entity';
 import { Event } from '../../../../domain/event';
 import { EventRepository } from '../../../event-abstract.repository';
 import { EventMapper } from '../mappers/event.mapper';
+import { QueryEventDto } from 'src/events/dto/query-event.dto';
 
 @Injectable()
 export class EventRelationalRepository implements EventRepository {
@@ -31,9 +32,27 @@ export class EventRelationalRepository implements EventRepository {
     return entity ? EventMapper.toDomain(entity) : null;
   }
 
-  async findMany(query?: any): Promise<Event[]> {
-    const entities = await this.eventsRepository.find(query);
-    return entities.map((entity) => EventMapper.toDomain(entity));
+  async findManyWithPagination(queryDto: QueryEventDto): Promise<Event[]> {
+    const { name, profileId, page = 1, limit = 10 } = queryDto;
+    const skip = (page - 1) * limit;
+
+    // Build TypeORM "where" conditions
+    const where: any = {};
+    if (name) {
+      where.name = name; // exact match; for partial match, use Like
+    }
+    if (profileId) {
+      where.profileId = profileId;
+    }
+
+    const [eventEntities] = await this.eventsRepository.findAndCount({
+      where,
+      order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
+    });
+
+    return eventEntities.map((eventEntity) => EventMapper.toDomain(eventEntity));
   }
 
   async findById(id: Event['id']): Promise<NullableType<Event>> {

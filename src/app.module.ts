@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import databaseConfig from './database/config/database.config';
 import appConfig from './config/app.config';
+import { EventModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import appConfig from './config/app.config';
       dataSourceFactory: async (options: DataSourceOptions) => {
         return new DataSource(options).initialize();
       },
-    })
+    }),
+    EventModule
   ],
   controllers: [AppController],
   providers: [AppService],

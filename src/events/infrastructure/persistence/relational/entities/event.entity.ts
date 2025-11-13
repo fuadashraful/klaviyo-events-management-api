@@ -10,7 +10,7 @@ import {
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
 
 @Entity({
-  name: 'event',
+  name: 'events',
 })
 export class EventEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn('uuid')

@@ -12,4 +12,4 @@ import { RelationalEventPersistenceModule } from './infrastructure/persistence/r
   providers: [EventsService],
   exports: [EventsService, RelationalEventPersistenceModule],
 })
-export class BooksModule {}
+export class EventModule {}

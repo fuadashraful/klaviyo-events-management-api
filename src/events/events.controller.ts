@@ -1,6 +1,8 @@
 import {
   Controller,
   Post,
+  Get,
+  Query,
   Body,
   HttpCode,
   HttpStatus,
@@ -10,16 +12,41 @@ import {
   ApiTags,
   ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOkResponse
 } from '@nestjs/swagger';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { CreateBulkEventDto } from './dto/bulk-create-event.dto';
+import { QueryEventDto } from './dto/query-event.dto';
 import { Event } from './domain/event';
+import {
+  InfinityPaginationResponse,
+  InfinityPaginationResponseDto,
+} from '../utils/dto/infinity-pagination-response.dto';
+import { infinityPagination } from '../utils/infinity-pagination';
 
 @ApiTags('Events')
 @Controller('v1/events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
+
+  /**
+   * GET /events
+   * Get all events with pagination, search, and filtering
+   */
+  @ApiOkResponse({ type: InfinityPaginationResponse(Event) })
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async findAll(
+    @Query() query: QueryEventDto,
+  ): Promise<InfinityPaginationResponseDto<Event>> {
+    const page = query?.page ?? 1;
+    let limit = query?.limit ?? 10;
+    if (limit > 50) limit = 50;
+
+    const events = await this.eventsService.findManyWithPagination(query);
+    return infinityPagination(events, { page, limit });
+  }
 
   /**
    * POST /events

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { CreateBulkEventDto } from './dto/bulk-create-event.dto';
+import { QueryEventDto } from './dto/query-event.dto';
 import { EventRepository } from './infrastructure/event-abstract.repository';
 import { Event } from './domain/event';
 
@@ -90,11 +91,8 @@ export class EventsService {
     return event;
   }
 
-  /**
-   * Optional: fetch events with pagination, filtering, etc.
-   */
-  async findMany(query?: any): Promise<Event[]> {
-    return this.eventRepository.findMany(query);
+  async findManyWithPagination(queryDto: QueryEventDto): Promise<Event[]> {
+    return this.eventRepository.findManyWithPagination(queryDto);
   }
 
   /**

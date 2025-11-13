@@ -6,7 +6,7 @@ export abstract class EventRepository {
 
   abstract findByName(name: string): Promise<NullableType<Event>>;
 
-  abstract findMany(query?: any): Promise<Event[]>;
+  abstract findManyWithPagination(query?: any): Promise<Event[]>;
 
   abstract findById(id: Event['id']): Promise<NullableType<Event>>;
 
